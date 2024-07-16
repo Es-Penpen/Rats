@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.rats.data.ratlantis.tags.RatlantisBlockTags;
 import com.github.alexthe666.rats.registry.RatsSoundRegistry;
+import com.github.alexthe666.rats.server.misc.FeralRatlanteanCustomizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -36,6 +37,7 @@ public class FeralRatlantean extends Monster implements IAnimatedEntity {
 	private static final EntityDataAccessor<Integer> COLOR_VARIANT = SynchedEntityData.defineId(FeralRatlantean.class, EntityDataSerializers.INT);
 	private int animationTick;
 	private Animation currentAnimation;
+	FeralRatlanteanCustomizer feralRatlanCust = new FeralRatlanteanCustomizer();
 
 	public FeralRatlantean(EntityType<? extends Monster> type, Level level) {
 		super(type, level);
@@ -110,41 +112,25 @@ public class FeralRatlantean extends Monster implements IAnimatedEntity {
 	public void doExtraEffect(LivingEntity target) {
 	}
 
-	public int getColorVariant() {
-		return this.getEntityData().get(COLOR_VARIANT);
-	}
-
-	public void setColorVariant(int color) {
-		this.getEntityData().set(COLOR_VARIANT, color);
-	}
-
-	public void setToga(boolean plague) {
-		this.getEntityData().set(TOGA, plague);
-	}
-
-	public boolean hasToga() {
-		return this.getEntityData().get(TOGA);
-	}
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("ColorVariant", this.getColorVariant());
-		compound.putBoolean("Toga", this.hasToga());
+		compound.putInt("ColorVariant", feralRatlanCust.getColorVariant(this, COLOR_VARIANT));
+		compound.putBoolean("Toga", feralRatlanCust.hasToga(this, TOGA));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		this.setToga(compound.getBoolean("Toga"));
-		this.setColorVariant(compound.getInt("ColorVariant"));
+		feralRatlanCust.setToga(this, TOGA, compound.getBoolean("Toga"));
+		feralRatlanCust.setColorVariant(this, COLOR_VARIANT, compound.getInt("ColorVariant"));
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor, DifficultyInstance difficulty, MobSpawnType type, @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
 		data = super.finalizeSpawn(accessor, difficulty, type, data, tag);
-		this.setColorVariant(this.getRandom().nextInt(4));
-		this.setToga(true);
+		feralRatlanCust.setColorVariant(this, COLOR_VARIANT, this.getRandom().nextInt(4));
+		feralRatlanCust.setToga(this, TOGA, true);
 		return data;
 	}
 

@@ -108,11 +108,6 @@ public class PlagueBeast extends FeralRatlantean {
 	}
 
 	@Override
-	public boolean hasToga() {
-		return false;
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		if (this.getOwnerId() == null) {

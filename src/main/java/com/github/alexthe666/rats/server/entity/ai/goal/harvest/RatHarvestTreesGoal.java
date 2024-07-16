@@ -148,10 +148,11 @@ public class RatHarvestTreesGoal extends BaseRatHarvestGoal {
 				level.destroyBlock(logpos, true);
 			}
 		}
-		this.handleLeafRemoval(level, base, baseBlock, logsToKill, this.treeSize);
+		this.handleLeafRemoval(level, base, baseBlock, logsToKill);
 	}
 
-	private void handleLeafRemoval(Level level, BlockPos base, BlockState baseBlock, List<BlockPos> logstobreak, int logCount) {
+	private void handleLeafRemoval(Level level, BlockPos base, BlockState baseBlock, List<BlockPos> logstobreak) {
+		int logCount = this.treeSize;
 		List<BlockPos> logs = new ArrayList<>();
 		List<BlockPos> leaves = new ArrayList<>();
 

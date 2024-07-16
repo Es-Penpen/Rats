@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.rats.RatConfig;
 import com.github.alexthe666.rats.RatsMod;
 import com.github.alexthe666.rats.client.events.ForgeClientEvents;
+import com.github.alexthe666.rats.client.events.RatOnStaffEvent;
 import com.github.alexthe666.rats.data.tags.RatsItemTags;
 import com.github.alexthe666.rats.registry.*;
 import com.github.alexthe666.rats.server.block.RatCageBlock;
@@ -1183,7 +1184,8 @@ public class TamedRat extends InventoryRat {
 
 	@Override
 	public boolean isCurrentlyGlowing() {
-		if (this.level().isClientSide() && ForgeClientEvents.isRatSelectedOnStaff(this)) return true;
+		RatOnStaffEvent ratOnStaffEvent = new RatOnStaffEvent();
+		if (this.level().isClientSide() && ratOnStaffEvent.isRatSelectedOnStaff(this)) return true;
 		return super.isCurrentlyGlowing();
 	}
 

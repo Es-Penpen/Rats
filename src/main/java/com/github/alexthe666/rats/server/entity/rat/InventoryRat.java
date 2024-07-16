@@ -3,6 +3,7 @@ package com.github.alexthe666.rats.server.entity.rat;
 import com.github.alexthe666.rats.RatConfig;
 import com.github.alexthe666.rats.RatsMod;
 import com.github.alexthe666.rats.registry.RatsDataSerializerRegistry;
+import com.github.alexthe666.rats.server.inventory.RatEquipmentSlotConfig;
 import com.github.alexthe666.rats.server.inventory.RatMenu;
 import com.github.alexthe666.rats.server.inventory.container.RatContainer;
 import com.github.alexthe666.rats.server.items.RatStaffItem;
@@ -51,6 +52,7 @@ public abstract class InventoryRat extends DiggingRat implements ContainerListen
 	private static final EntityDataAccessor<List<GlobalPos>> PATROL_NODES = SynchedEntityData.defineId(InventoryRat.class, RatsDataSerializerRegistry.GLOBAL_POS_LIST.get());
 	private static final EntityDataAccessor<Byte> VISIBILITY_FLAGS = SynchedEntityData.defineId(InventoryRat.class, EntityDataSerializers.BYTE);
 
+	private final RatEquipmentSlotConfig ratEquipSlotConfig = new RatEquipmentSlotConfig();
 	private RatContainer inventory;
 	private LazyOptional<?> itemHandler = null;
 	private boolean inventoryOpen;
@@ -194,24 +196,12 @@ public abstract class InventoryRat extends DiggingRat implements ContainerListen
 
 	@Override
 	public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
-		if (this.getInventory() != null) {
-			if (slot == EquipmentSlot.MAINHAND) {
-				this.getInventory().setItem(0, stack);
-			} else if (slot == EquipmentSlot.HEAD) {
-				this.getInventory().setItem(1, stack);
-			} else if (slot == EquipmentSlot.OFFHAND) {
-				this.getInventory().setItem(2, stack);
-			} else if (slot == EquipmentSlot.CHEST) {
-				this.getInventory().setItem(3, stack);
-			} else if (slot == EquipmentSlot.LEGS) {
-				this.getInventory().setItem(4, stack);
-			} else if (slot == EquipmentSlot.FEET) {
-				this.getInventory().setItem(5, stack);
-			} else {
-				super.setItemSlot(slot, stack);
-			}
-		} else {
+		int slotInd = this.ratEquipSlotConfig.getIndexOfEquipmentSlot(slot);
+		if(this.getInventory() == null || slotInd == -1){
 			super.setItemSlot(slot, stack);
+		}
+		else{
+			this.getInventory().setItem(slotInd, stack);
 		}
 	}
 

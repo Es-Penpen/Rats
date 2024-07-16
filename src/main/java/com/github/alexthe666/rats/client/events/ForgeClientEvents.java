@@ -405,15 +405,4 @@ public class ForgeClientEvents {
 			}
 		}
 	}
-
-	public static boolean isRatSelectedOnStaff(TamedRat rat) {
-		if (Minecraft.getInstance().player != null) {
-			LocalPlayer player = Minecraft.getInstance().player;
-			if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof RatStaffItem || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof RatStaffItem) {
-				LazyOptional<SelectedRatCapability> cap = player.getCapability(RatsCapabilityRegistry.SELECTED_RAT);
-				return cap.resolve().isPresent() && Objects.equals(cap.resolve().get().getSelectedRat(), rat);
-			}
-		}
-		return false;
-	}
 }
